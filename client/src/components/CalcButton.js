@@ -9,9 +9,12 @@ const useStyles = makeStyles({
   }
 });
 
-export default function CalcButton({keyValue, customStyle}) {
+export default function CalcButton({keyValue, clickFunc, funcParam = keyValue, customStyle, disableToggle}) {
   const classes = useStyles();
   return (
-    <Button variant="contained" color="primary" className={ customStyle ? classes.key + ' ' + customStyle : classes.key}> {keyValue} </Button>
+    <Button variant="contained" color="primary" className={ customStyle ? classes.key + ' ' + customStyle : classes.key} 
+      onClick={() => clickFunc(funcParam)} disabled={disableToggle}>
+      {keyValue}
+    </Button>
   )
 }
