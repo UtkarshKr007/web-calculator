@@ -12,7 +12,7 @@ import { Context } from './CalcProvider';
 
 const useStyles = makeStyles({
   calculator: {
-    width: '100%',
+    width: '50%',
     height: '90vh'
   },
   calcCard: {
@@ -25,15 +25,9 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row'
   },
-  ac: {
+  specialButtons: {
     display: 'flex',
     flexGrow: 2,
-    // backgroundColor: 'red'
-  },
-  eq: {
-    display: 'flex',
-    flexGrow: 2,
-    // backgroundColor: 'green'
   }
 });
 
@@ -44,10 +38,10 @@ export default function Calculator() {
       {context =>  (
         <React.Fragment>
           <Card id="calc-card" className={classes.calcCard}>
-            <CardHeader title={context.display} />
+            <CardHeader title={context.display} subheader={context.preview} />
             <CardContent>
               <ButtonGroup color="primary" aria-label="primary button group" className={classes.calcRow}>
-                <CalcButton keyValue={'AC'} clickFunc={context.press} customStyle={classes.ac}/>
+                <CalcButton keyValue={'AC'} clickFunc={context.press} customStyle={classes.specialButtons}/>
                 <CalcButton keyValue={<KeyboardBackspaceIcon />}  clickFunc={context.press} funcParam={'backspace'}/>
                 <CalcButton keyValue={'/'}  clickFunc={context.press} disableToggle={!context.validLen}/>               
               </ButtonGroup>
@@ -59,7 +53,7 @@ export default function Calculator() {
               <ButtonGroup aria-label="contained primary button group" className={classes.calcRow}>
                 <CalcButton keyValue={'.'} clickFunc={context.press} disableToggle={!context.validLen} />
                 <CalcButton keyValue={'0'} clickFunc={context.press} disableToggle={!context.validLen} />
-                <CalcButton keyValue={'='} clickFunc={context.press} disableToggle={!context.validCalc} customStyle={classes.eq} />
+                <CalcButton keyValue={'='} clickFunc={context.press} disableToggle={!context.validCalc} customStyle={classes.specialButtons} />
               </ButtonGroup>
 
             </CardContent>

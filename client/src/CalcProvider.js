@@ -5,6 +5,8 @@ export const Context = React.createContext();
 const CalcProvider = props => {
 
   const [display, updateDisplay] = useState('');
+  const [preview, updatePreview] = useState('Do some calculations')
+
   const [validLen, setLengthValidity] = useState(true);
   const [validCalc, setCalcValidity] = useState(true);
 
@@ -18,9 +20,11 @@ const CalcProvider = props => {
     const answer = Math.round(eval(stringToEvaluate) * quint) / quint;
 
     if (answer.toString() === 'NaN' || answer.toString() === 'Infinity') {
+      updatePreview('Cannot divide by zero');
       return false;
 
     } else if (answer > 10**19 || answer < (-10)**19) {
+      updatePreview('Range of +/- 100 quintillion Exceeded');
       return false;
 
     } else {
@@ -40,6 +44,7 @@ const CalcProvider = props => {
 
       case '+': case '-': case '*': case '/':
         if (calcText === '') {
+          updatePreview('Enter a number before an operation');
           return;
         }
         calcText += pressedValue;
@@ -51,6 +56,7 @@ const CalcProvider = props => {
 
       case 'AC':
         calcText = '';
+        updatePreview('');
         break;
 
       case '.':
@@ -61,6 +67,7 @@ const CalcProvider = props => {
       // intentional fallthrough so .(decimal) is added to display when it's followed by non-operator or it's a non-empty displays.
       case '0':
         if (calcText === '') {
+          updatePreview('Leading zero can only be used with decimals');
           return;
         }
 
@@ -70,17 +77,25 @@ const CalcProvider = props => {
 
     }
     updateDisplay(calcText);
+    if(validateStringFormat(calcText) && validateCalculation(calcText)) {
+      updatePreview(stringAnswer);
+    }
   }
 
   const calculate = () => {
-    if (validateStringFormat(display) && validateCalculation(display)) {
+    if (validateStringFormat(display)) {
+      if (validateCalculation(display)) {
         updateDisplay(stringAnswer);
+        updatePreview('Your calculation was ' + display);
+      }
+    } else {
+      updatePreview('Calculation is not valid')
     }
   }
 
 
   return (
-    <Context.Provider value={{ display, validLen, validCalc, press }}>
+    <Context.Provider value={{ display, preview, validLen, validCalc, press }}>
       {props.children}
     </Context.Provider>
   );
