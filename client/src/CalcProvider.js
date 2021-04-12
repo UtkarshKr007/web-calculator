@@ -23,16 +23,15 @@ const CalcProvider = props => {
 
     ws.current.onmessage = e => {
         const logsFromServer = JSON.parse(e.data);
-        updateCalcLog([...logsFromServer].reverse());
+        updateCalcLogs([...logsFromServer].reverse());
     };
 }, []);
 
   const [display, updateDisplay] = useState('');
   const [preview, updatePreview] = useState('Do some calculations')
-  const [calcLogs, updateCalcLog] = useState([]);
+  const [calcLogs, updateCalcLogs] = useState([]);
 
   const [validLen, setLengthValidity] = useState(true);
-  const [validCalc, setCalcValidity] = useState(true);
 
   var stringAnswer = '';
   const quint = 100000000000000000000;
@@ -49,6 +48,7 @@ const CalcProvider = props => {
 
     } else if (answer > 10**19 || answer < (-10)**19) {
       updatePreview('Range of +/- 100 quintillion Exceeded');
+      setLengthValidity(false);
       return false;
 
     } else {
@@ -101,6 +101,12 @@ const CalcProvider = props => {
 
     }
     updateDisplay(calcText);
+    
+    setLengthValidity(calcText.length <= 21);
+    if (!validLen) {
+      updatePreview("Input too big. Clear Input");
+    }
+
     if(validateStringFormat(calcText) && validateCalculation(calcText)) {
       updatePreview(stringAnswer);
     }
@@ -109,6 +115,7 @@ const CalcProvider = props => {
   const calculate = () => {
     if (validateStringFormat(display)) {
       if (validateCalculation(display)) {
+        ws.current.send(JSON.stringify(display + ' = ' + stringAnswer));
         updateDisplay(stringAnswer);
         updatePreview('Your calculation was ' + display);
       }
@@ -119,7 +126,7 @@ const CalcProvider = props => {
 
 
   return (
-    <Context.Provider value={{ display, preview, calcLogs, validLen, validCalc, press }}>
+    <Context.Provider value={{ display, preview, calcLogs, validLen, press }}>
       {props.children}
     </Context.Provider>
   );

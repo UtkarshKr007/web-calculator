@@ -16,25 +16,36 @@ import Logs from './components/Logs';
 import { Context } from './CalcProvider';
 
 const useStyles = makeStyles({
-  borderRight500: {
+  headers: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  calcSide: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRight: '1px solid #e0e0e0'
   },
   calcCard: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor:'orange',
+      boxShadow: '10px 10px'
   },
-  header: {
+  calcHeader: {
       display: 'flex',
       justifyContent: 'flex-end',
       alignItems: 'center',
       width: '250px',
-      height: '40px',
+      height: '60px',
       fontSize: 'large',
       backgroundColor: 'gainsboro',
       overflow: 'hidden',
-      marginTop: '20px'
+      margin: '20px'
   },
   calcRow: {
     display: 'flex',
@@ -53,16 +64,17 @@ export default function Calculator() {
       {context =>  (
         <React.Fragment>
           <Grid container>
-            <Grid item xs={12} >
-                <Typography variant="h5" className="header-message">Online Calculator</Typography>
+            <Grid item xs={12} className={classes.headers} >
+                <Typography variant="h4" className="header-message">Online Calculator</Typography>
+                <Typography variant="h5"> Recent Calculations From Our Users </Typography>
             </Grid>
           </Grid>
 
-          <Grid container component={Paper} className={classes.cardSection}>
+          <Grid container component={Paper} className={classes.mainContent}>
 
-            <Grid item xs={5} className={classes.borderRight500}>
+            <Grid item xs={5} className={classes.calcSide}>
               <Card className={classes.calcCard}>
-                <CardHeader title={context.display} subheader={context.preview} className={classes.header} />
+                <CardHeader align="right" title={context.display} subheader={context.preview} className={classes.calcHeader} />
                 <CardContent>
 
                   <ButtonGroup color="primary" aria-label="primary button group" className={classes.calcRow}>
@@ -78,7 +90,7 @@ export default function Calculator() {
                   <ButtonGroup aria-label="contained primary button group" className={classes.calcRow}>
                     <CalcButton keyValue={'.'} clickFunc={context.press} disableToggle={!context.validLen} />
                     <CalcButton keyValue={'0'} clickFunc={context.press} disableToggle={!context.validLen} />
-                    <CalcButton keyValue={'='} clickFunc={context.press} disableToggle={!context.validCalc} customStyle={classes.specialButtons} />
+                    <CalcButton keyValue={'='} clickFunc={context.press} customStyle={classes.specialButtons} />
                   </ButtonGroup>
 
                 </CardContent>
