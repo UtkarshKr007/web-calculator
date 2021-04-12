@@ -22,14 +22,14 @@ const CalcProvider = props => {
     if (!ws.current) return;
 
     ws.current.onmessage = e => {
-        const calcLogs = JSON.parse(e.data);
-        updateCalcLog([...calcLogs].reverse());
+        const logsFromServer = JSON.parse(e.data);
+        updateCalcLog([...logsFromServer].reverse());
     };
 }, []);
 
   const [display, updateDisplay] = useState('');
   const [preview, updatePreview] = useState('Do some calculations')
-  const [calcLog, updateCalcLog] = useState([]);
+  const [calcLogs, updateCalcLog] = useState([]);
 
   const [validLen, setLengthValidity] = useState(true);
   const [validCalc, setCalcValidity] = useState(true);
