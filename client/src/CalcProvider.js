@@ -1,11 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export const Context = React.createContext();
 
 const CalcProvider = props => {
 
+  const ws = useRef(null);
+
+  useEffect(() => {
+    ws.current = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host + "/ws");
+
+    ws.current.onerror = (e) => console.error("WebSocket error observed:", e.reason);
+    ws.current.onclose = (e) =>  {
+      console.log('Socket is closed', e.reason);
+      return () => {
+        ws.current.close();
+      };
+    }
+  },[]);
+
+  useEffect(() => {
+    if (!ws.current) return;
+
+    ws.current.onmessage = e => {
+        const calcLogs = JSON.parse(e.data);
+        updateCalcLog([...calcLogs].reverse());
+    };
+}, []);
+
   const [display, updateDisplay] = useState('');
   const [preview, updatePreview] = useState('Do some calculations')
+  const [calcLog, updateCalcLog] = useState([]);
 
   const [validLen, setLengthValidity] = useState(true);
   const [validCalc, setCalcValidity] = useState(true);
@@ -95,7 +119,7 @@ const CalcProvider = props => {
 
 
   return (
-    <Context.Provider value={{ display, preview, validLen, validCalc, press }}>
+    <Context.Provider value={{ display, preview, calcLogs, validLen, validCalc, press }}>
       {props.children}
     </Context.Provider>
   );

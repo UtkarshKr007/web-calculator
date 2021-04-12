@@ -4,8 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,6 +12,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import CalcButtonGroup from './components/CalcButtonGroup';
 import CalcButton from './components/CalcButton';
+import Logs from './components/Logs';
 import { Context } from './CalcProvider';
 
 const useStyles = makeStyles({
@@ -85,10 +84,7 @@ export default function Calculator() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={5}>
-                <List className={classes.LogsArea}>
-                </List>
-            </Grid>
+            <Logs logs={context.calcLogs}/>
           </Grid>
         </React.Fragment>
       )}
