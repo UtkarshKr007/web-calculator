@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export const Context = React.createContext();
 

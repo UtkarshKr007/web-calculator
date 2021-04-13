@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 
-import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -16,17 +15,12 @@ import Logs from './components/Logs';
 import { Context } from './CalcProvider';
 
 const useStyles = makeStyles({
-  headers: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  calcSide: {
+  calcBox: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRight: '1px solid #e0e0e0'
+    marginBottom: '10px'
   },
   calcCard: {
       display: 'flex',
@@ -36,7 +30,7 @@ const useStyles = makeStyles({
       backgroundColor:'orange',
       boxShadow: '10px 10px'
   },
-  calcHeader: {
+  calcDisplay: {
       display: 'flex',
       justifyContent: 'flex-end',
       alignItems: 'center',
@@ -64,39 +58,34 @@ export default function Calculator() {
       {context =>  (
         <React.Fragment>
           <Grid container>
-            <Grid item xs={12} className={classes.headers} >
-                <Typography variant="h4" className="header-message">Online Calculator</Typography>
-                <Typography variant="h5"> Recent Calculations From Our Users </Typography>
+            <Grid item xs={12} sm={7}>
+              <Typography variant="h3" align="center" gutterBottom={true}> Online Calculator</Typography>
+              <Grid item className={classes.calcBox}>
+                <Card className={classes.calcCard}>
+                  <CardHeader align="right" title={context.display} subheader={context.preview} className={classes.calcDisplay} />
+                  <CardContent>
+                    <ButtonGroup color="primary" aria-label="primary button group" className={classes.calcRow}>
+                      <CalcButton keyValue={'AC'} clickFunc={context.press} customStyle={classes.specialButtons}/>
+                      <CalcButton keyValue={<KeyboardBackspaceIcon />}  clickFunc={context.press} funcParam={'backspace'}/>
+                      <CalcButton keyValue={'/'}  clickFunc={context.press} disableToggle={!context.validLen}/>               
+                    </ButtonGroup>
+
+                    <CalcButtonGroup keyValues={['7','8','9','*']} clickFunc={context.press} disableToggle={!context.validLen} />
+                    <CalcButtonGroup keyValues={['4','5','6','+']} clickFunc={context.press} disableToggle={!context.validLen} />
+                    <CalcButtonGroup keyValues={['1','2','3','-']} clickFunc={context.press} disableToggle={!context.validLen} />
+
+                    <ButtonGroup aria-label="contained primary button group" className={classes.calcRow}>
+                      <CalcButton keyValue={'.'} clickFunc={context.press} disableToggle={!context.validLen} />
+                      <CalcButton keyValue={'0'} clickFunc={context.press} disableToggle={!context.validLen} />
+                      <CalcButton keyValue={'='} clickFunc={context.press} customStyle={classes.specialButtons} />
+                    </ButtonGroup>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
-
-          <Grid container component={Paper} className={classes.mainContent}>
-
-            <Grid item xs={5} className={classes.calcSide}>
-              <Card className={classes.calcCard}>
-                <CardHeader align="right" title={context.display} subheader={context.preview} className={classes.calcHeader} />
-                <CardContent>
-
-                  <ButtonGroup color="primary" aria-label="primary button group" className={classes.calcRow}>
-                    <CalcButton keyValue={'AC'} clickFunc={context.press} customStyle={classes.specialButtons}/>
-                    <CalcButton keyValue={<KeyboardBackspaceIcon />}  clickFunc={context.press} funcParam={'backspace'}/>
-                    <CalcButton keyValue={'/'}  clickFunc={context.press} disableToggle={!context.validLen}/>               
-                  </ButtonGroup>
-
-                  <CalcButtonGroup keyValues={['7','8','9','*']} clickFunc={context.press} disableToggle={!context.validLen} />
-                  <CalcButtonGroup keyValues={['4','5','6','+']} clickFunc={context.press} disableToggle={!context.validLen} />
-                  <CalcButtonGroup keyValues={['1','2','3','-']} clickFunc={context.press} disableToggle={!context.validLen} />
-
-                  <ButtonGroup aria-label="contained primary button group" className={classes.calcRow}>
-                    <CalcButton keyValue={'.'} clickFunc={context.press} disableToggle={!context.validLen} />
-                    <CalcButton keyValue={'0'} clickFunc={context.press} disableToggle={!context.validLen} />
-                    <CalcButton keyValue={'='} clickFunc={context.press} customStyle={classes.specialButtons} />
-                  </ButtonGroup>
-
-                </CardContent>
-              </Card>
+            <Grid item xs={12} sm={5}>
+              <Logs logs={context.calcLogs}/>
             </Grid>
-            <Logs logs={context.calcLogs}/>
           </Grid>
         </React.Fragment>
       )}
