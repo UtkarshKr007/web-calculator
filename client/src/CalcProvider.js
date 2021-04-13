@@ -7,15 +7,7 @@ const CalcProvider = props => {
   const ws = useRef(null);
 
   useEffect(() => {
-    ws.current = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host + "/ws");
-
-    ws.current.onerror = (e) => console.error("WebSocket error observed:", e.reason);
-    ws.current.onclose = (e) =>  {
-      console.log('Socket is closed', e.reason);
-      return () => {
-        ws.current.close();
-      };
-    }
+    ws.current = new ReconnectingWebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host + "/ws");
   },[]);
 
   useEffect(() => {
