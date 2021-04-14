@@ -1,4 +1,4 @@
-# An online calculator implemented usign Websockets.
+# An online calculator implemented using Websockets.
 
 [Live Demo deployed on heroku](https://quiet-mesa-40326.herokuapp.com/)
 
@@ -34,7 +34,7 @@ much furthur and made even more components to furthur abstract the calcualtor's 
 time investment not worth it.
 
 I used [JavaScript's WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) during most of development and it worked fine, but then I found 
-[Reconnecting Websocket](https://github.com/joewalnes/reconnecting-websocket) which is a great tool to reduce the logic of reconnecting to the client upon lost connections.
+[Reconnecting Websocket](https://github.com/pladaria/reconnecting-websocket) which is a great tool to reduce the logic of reconnecting to the client upon lost connections.
 
 Otherwise, the main fundamental of the client side is built on using [React Context](https://reactjs.org/docs/context.html) along with 
 [React State Hooks](https://reactjs.org/docs/hooks-state.html) and [React Effect Hooks](https://reactjs.org/docs/hooks-effect.html). In this case, 
